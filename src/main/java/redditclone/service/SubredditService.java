@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import redditclone.dto.SubredditDto;
+import redditclone.exception.SpringRedditException;
 import redditclone.mapper.SubredditMapper;
 import redditclone.model.Subreddit;
 import redditclone.repository.SubredditRepository;
@@ -30,4 +31,8 @@ public class SubredditService {
         return subredditRepository.findAll().stream().map(subredditMapper::mapSubredditToDto).toList();
     }
 
+    public SubredditDto getSubreddit(Long id) {
+        Subreddit subreddit = subredditRepository.findById(id).orElseThrow(() -> new SpringRedditException("No subreddit found with id: " + id));
+        return subredditMapper.mapSubredditToDto(subreddit);
+    }
 }

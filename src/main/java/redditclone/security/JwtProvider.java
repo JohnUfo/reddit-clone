@@ -13,7 +13,7 @@ import java.util.Date;
 @Service
 public class JwtProvider {
 
-    private final String SECRET_KEY = "BuTokenningMaxfiySoziHechKimBilmasim123456789012341234123421341241241234213412354rfgfdvcrtfbfdbfgvbfdbv"; // generates a secure key for HS512
+    private final String SECRET_KEY = "BuTokenningMaxfiySoziHechKimBilmasim123456789012341234123421341241241234213412354rfgfdvcrtfbfdbfgvbfdbv";
 
 
     private final long JWT_EXPIRATION = 24 * 60 * 60;

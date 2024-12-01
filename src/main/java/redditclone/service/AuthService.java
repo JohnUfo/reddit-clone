@@ -1,5 +1,11 @@
 package redditclone.service;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import redditclone.dto.AuthenticationResponse;
+import redditclone.dto.LoginRequest;
 import redditclone.dto.RegisterRequest;
 import redditclone.exception.SpringRedditException;
 import redditclone.model.NotificationEmail;
@@ -10,7 +16,7 @@ import redditclone.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import redditclone.security.JwtProvider;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -24,6 +30,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
@@ -66,4 +74,14 @@ public class AuthService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        System.out.print(authenticate.getPrincipal() + "USERRRR");
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String authenticationToken = jwtProvider.generateToken(authenticate);
+        return new AuthenticationResponse(authenticationToken, loginRequest.getUsername());
+    }
+
 }

@@ -15,11 +15,9 @@ public class JwtProvider {
 
     private final String SECRET_KEY = "BuTokenningMaxfiySoziHechKimBilmasim123456789012341234123421341241241234213412354rfgfdvcrtfbfdbfgvbfdbv";
 
-
-    private final long JWT_EXPIRATION = 24 * 60 * 60;
-
     public String generateToken(Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
+        long JWT_EXPIRATION = 24 * 60 * 60;
         return Jwts.builder()
                 .setSubject(principal.getUsername())
                 .setIssuedAt(new Date())

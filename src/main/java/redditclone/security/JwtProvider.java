@@ -17,7 +17,7 @@ public class JwtProvider {
 
     public String generateToken(Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
-        long JWT_EXPIRATION = 24 * 60 * 60;
+        long JWT_EXPIRATION = 24 * 60 * 60 * 100;
         return Jwts.builder()
                 .setSubject(principal.getUsername())
                 .setIssuedAt(new Date())

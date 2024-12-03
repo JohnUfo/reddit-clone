@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,6 +33,7 @@ public class Subreddit {
     @OneToMany(fetch = LAZY)
     private List<Post> posts;
 
+    @CreationTimestamp
     private Instant createdDate;
 
     @ManyToOne(fetch = LAZY)

@@ -6,10 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import redditclone.dto.PostRequest;
 import redditclone.dto.PostResponse;
+import redditclone.model.Post;
 import redditclone.service.PostService;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -20,9 +22,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
-        postService.save(postRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest) {
+        Post save = postService.save(postRequest);
+        return ResponseEntity.status(CREATED).body(save);
     }
 
     @GetMapping

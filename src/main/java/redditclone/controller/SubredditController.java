@@ -23,7 +23,6 @@ public class SubredditController {
     @PostMapping
     public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
         SubredditDto savedSubreddit = subredditService.save(subredditDto);
-        System.out.printf("SAVE : " + savedSubreddit);
         return ResponseEntity.status(CREATED).body(savedSubreddit);
     }
 

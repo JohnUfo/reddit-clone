@@ -31,13 +31,14 @@ public class CommentService {
     private final MailService mailService;
     private static final String POST_URL = "";
 
-    public void save(CommentsDto commentsDto) {
+    public CommentsDto save(CommentsDto commentsDto) {
         Post post = postRepository.findById(commentsDto.getPostId()).orElseThrow(() -> new PostNotFoundException(commentsDto.getPostId().toString()));
         Comment comment = commentMapper.map(commentsDto, post, authService.getCurrentUser());
-        commentRepository.save(comment);
+        Comment save = commentRepository.save(comment);
 
         String message = mailContentBuilder.build(post.getUser().getUsername() + " posted a comment on your post" + POST_URL);
         sendCommentNotification(message, post.getUser());
+        return commentMapper.mapToDto(save);
     }
 
     private void sendCommentNotification(String message, User user) {

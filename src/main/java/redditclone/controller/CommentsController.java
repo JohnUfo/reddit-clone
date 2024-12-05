@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import redditclone.dto.CommentsDto;
+import redditclone.mapper.CommentMapper;
+import redditclone.model.Comment;
 import redditclone.service.CommentService;
 
 import java.util.List;
@@ -19,9 +21,8 @@ public class CommentsController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> createComment(@RequestBody CommentsDto commentsDto) {
-        commentService.save(commentsDto);
-        return new ResponseEntity<>(CREATED);
+    public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentsDto) {
+        return ResponseEntity.status(CREATED).body(commentService.save(commentsDto));
     }
 
     @GetMapping("/by-post/{postId}")
@@ -30,7 +31,7 @@ public class CommentsController {
     }
 
     @GetMapping("/by-user/{username}")
-    public ResponseEntity<List<CommentsDto>> getAllCommentsForUser(@PathVariable String username){
+    public ResponseEntity<List<CommentsDto>> getAllCommentsForUser(@PathVariable String username) {
         return ResponseEntity.status(OK)
                 .body(commentService.getAllCommentsForUser(username));
     }

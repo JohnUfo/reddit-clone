@@ -3,25 +3,42 @@ package redditclone.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import redditclone.exception.SpringRedditException;
-
 import java.util.Date;
 
+@Getter
 @Service
+@RequiredArgsConstructor
 public class JwtProvider {
 
-    private final String SECRET_KEY = "BuTokenningMaxfiySoziHechKimBilmasim123456789012341234123421341241241234213412354rfgfdvcrtfbfdbfgvbfdbv";
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
+
+    @Value("${jwt.expiration.time}")
+    private Long jwtExpirationInMillis;
 
     public String generateToken(Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
-        long JWT_EXPIRATION = 24 * 60 * 60 * 100;
+        return generateTokenWithUserName(principal.getUsername());
+    }
+
+    public String generateTokenWithUserName(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationInMillis);
+
+
         return Jwts.builder()
-                .setSubject(principal.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
+                .setIssuer("self")
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .setSubject(username)
+                .claim("scope", "ROLE_USER")
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }

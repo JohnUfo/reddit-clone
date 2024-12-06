@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import redditclone.dto.CommentsDto;
-import redditclone.mapper.CommentMapper;
-import redditclone.model.Comment;
 import redditclone.service.CommentService;
 
 import java.util.List;
